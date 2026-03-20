@@ -2,8 +2,9 @@
 
 ---
 
-## Part 2 — Why I wrote it this way (Assuming this is pattern being followed in actual code base that I join, Though I have new ideas to improve, the initial thought is to follow current practices without breaking the flow of current code base, If I have enough time, I would then try to think about improvements in current code base but still follow the concept that current project should not break at any stage). The high level diagram is also added [Ambient Light WOrk flow](https://github.com/minamulhaq/ch/blob/master/part2_new_component/ambient_light_flow.drawio)
+## Part 2 — Why I wrote it this way (Assuming this is pattern being followed in actual code base that I join, Though I have new ideas to improve, the initial thought is to follow current practices without breaking the flow of current code base, If I have enough time, I would then try to think about improvements in current code base but still follow the concept that current project should not break at any stage). The high level diagram is also added [Ambient Light WOrk flow](https://github.com/minamulhaq/challenge/blob/master/part2_new_component/ambient_light_flow.drawio)
 
+![alt text](./media/ambient_light_flow.png)
 
 
 
@@ -31,7 +32,10 @@ There are six I2C operations in init, each of which can fail, and every failure 
 
 ## Things I'd do differently on a real project 
 
-The real bugs in RTOS are coming from race conditions, I would design something where I try to remove race conditions as much as possible. An idea is demonstrated here: [Ambient Light, Active Object Patter](https://github.com/minamulhaq/ch/blob/master/decisions.drawio)
+The real bugs in RTOS are coming from race conditions, I would design something where I try to remove race conditions as much as possible. An idea is demonstrated here: [Ambient Light, Active Object Patter](https://github.com/minamulhaq/challenge/blob/master/decisions.drawio)
+
+![alt text](./media/decisions.png)
+
 
 ### 1. One task owns the I2C bus — active object pattern
 
