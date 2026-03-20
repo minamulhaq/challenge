@@ -1,0 +1,242 @@
+<mxfile host="65bd71144e">
+    <diagram name="ALS3000 Component Flow" id="ambient-light-flow">
+        <mxGraphModel dx="879" dy="795" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="init-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=top;arcSize=2;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="20" width="290" height="700" as="geometry"/>
+                </mxCell>
+                <mxCell id="init-title" value="ambientLightInit()" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=13;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="25" width="290" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="init-start" value="START" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="58" width="130" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="init-sem" value="xSemaphoreCreateBinaryStatic(&#xa;&amp;s_sSemaphoreBuffer)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="55" y="114" width="220" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="init-gpio" value="s_configureGpio()&#xa;GPIO_MODE_INPUT · pull-up · NEGEDGE" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="55" y="174" width="220" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="init-isr-add" value="gpio_isr_handler_add(&#xa;ALERT_PIN, s_ambientLightIntrEvent)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="55" y="234" width="220" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="i2c-group-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffde7;strokeColor=#d6b656;arcSize=5;" parent="1" vertex="1">
+                    <mxGeometry x="38" y="290" width="254" height="212" as="geometry"/>
+                </mxCell>
+                <mxCell id="i2c-group-title" value="I2C Sensor Configuration (each fails → init_fail)" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=3;fontSize=9;" parent="1" vertex="1">
+                    <mxGeometry x="38" y="292" width="254" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="i2c-1" value="i2cWrite  CONTROL = 0x01  (active mode)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="52" y="312" width="222" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="i2c-2" value="i2cWrite  CONFIG  = 0x01  (interrupt enable)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="52" y="348" width="222" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="i2c-3" value="i2cWrite  THRESHOLD_HIGH = 1000 lux (0x03E8)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="52" y="384" width="222" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="i2c-4" value="i2cWrite  THRESHOLD_LOW  = 0x0000" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="52" y="420" width="222" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="i2c-5" value="i2cRead   INT_STATUS  (clears pending alert)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="52" y="456" width="222" height="28" as="geometry"/>
+                </mxCell>
+                <mxCell id="init-task-create" value="xTaskCreatePinnedToCore(&#xa;task, &quot;ambient_light&quot;, 2560, prio=5, core=1)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="55" y="522" width="220" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="init-task-dec" value="Created?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="582" width="170" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="init-ok" value="return  ESP_OK" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="650" width="130" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="init-fail-block" value="init_fail:&#xa;gpio_isr_handler_remove(ALERT_PIN)&#xa;s_pSemaphoreHandle = NULL" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="470" width="210" height="58" as="geometry"/>
+                </mxCell>
+                <mxCell id="init-fail-ret" value="return  ESP_FAIL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="375" y="550" width="160" height="36" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-start-sem" parent="1" source="init-start" target="init-sem" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-sem-gpio" parent="1" source="init-sem" target="init-gpio" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-gpio-isr" parent="1" source="init-gpio" target="init-isr-add" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-isr-i2c1" parent="1" source="init-isr-add" target="i2c-1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-i2c-1-2" parent="1" source="i2c-1" target="i2c-2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-i2c-2-3" parent="1" source="i2c-2" target="i2c-3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-i2c-3-4" parent="1" source="i2c-3" target="i2c-4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-i2c-4-5" parent="1" source="i2c-4" target="i2c-5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-i2c5-task" parent="1" source="i2c-5" target="init-task-create" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-task-dec" parent="1" source="init-task-create" target="init-task-dec" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-dec-ok" value="Yes" style="edgeStyle=orthogonalEdgeStyle;" parent="1" source="init-task-dec" target="init-ok" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-dec-fail" value="No" style="edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="init-task-dec" target="init-fail-block" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="330" y="605"/>
+                            <mxPoint x="330" y="499"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e-i2c-err" value="any step fails" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#b85450;fontSize=9;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="i2c-group-bg" target="init-fail-block" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="330" y="396"/>
+                            <mxPoint x="330" y="499"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e-fail-ret" parent="1" source="init-fail-block" target="init-fail-ret" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="alert-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=top;arcSize=2;" parent="1" vertex="1">
+                    <mxGeometry x="600" y="20" width="320" height="700" as="geometry"/>
+                </mxCell>
+                <mxCell id="alert-title" value="Alert Processing Flow" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=13;" parent="1" vertex="1">
+                    <mxGeometry x="600" y="25" width="320" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="hw-alert" value="⚡  ALERT pin goes LOW&#xa;(sensor reading &gt; threshold)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="58" width="200" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="isr-section-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;opacity=30;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="118" width="280" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="isr-section-title" value="ISR: s_ambientLightIntrEvent()" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=3;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="120" width="280" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="isr-remove" value="gpio_isr_handler_remove(ALERT_PIN)&#xa;[prevent re-entry while debouncing]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="638" y="140" width="244" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="isr-give" value="xSemaphoreGiveFromISR(s_pSemaphoreHandle)&#xa;portYIELD_FROM_ISR() if task woken" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="638" y="196" width="244" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="task-section-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;opacity=30;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="262" width="280" height="448" as="geometry"/>
+                </mxCell>
+                <mxCell id="task-section-title" value="Task: s_ambientLightTask()  ↺ infinite loop" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=3;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="264" width="280" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="task-take" value="xSemaphoreTake(portMAX_DELAY)&#xa;[blocks — waits for ISR signal]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="638" y="284" width="244" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="task-debounce" value="vTaskDelay(30 ms)  —  debounce" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="638" y="342" width="244" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="task-int-status" value="i2cRead  INT_STATUS  (1 byte)&#xa;→ reading clears ALERT pin" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="638" y="394" width="244" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="task-read-data" value="i2cRead  DATA_LOW + DATA_HIGH  (2 bytes)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="638" y="452" width="244" height="34" as="geometry"/>
+                </mxCell>
+                <mxCell id="task-combine" value="lux = (DATA_HIGH &lt;&lt; 8) | DATA_LOW" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=2;" parent="1" vertex="1">
+                    <mxGeometry x="638" y="504" width="244" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="task-cb-dec" value="callback&#xa;registered?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="680" y="550" width="160" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="task-cb-invoke" value="callback(lux)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="870" y="560" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="task-readd" value="gpio_isr_handler_add(ALERT_PIN, ISR)&#xa;[re-enable interrupt]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="638" y="622" width="244" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-hw-isr-remove" style="strokeColor=#d79b00;strokeWidth=2;" parent="1" source="hw-alert" target="isr-remove" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-isr-remove-give" parent="1" source="isr-remove" target="isr-give" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-sem-signal" value="semaphore signal" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#6c8ebf;strokeWidth=2;fontSize=9;fontStyle=2;" parent="1" source="isr-give" target="task-take" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-take-debounce" parent="1" source="task-take" target="task-debounce" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-debounce-int" parent="1" source="task-debounce" target="task-int-status" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-int-data" parent="1" source="task-int-status" target="task-read-data" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-data-combine" parent="1" source="task-read-data" target="task-combine" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-combine-dec" parent="1" source="task-combine" target="task-cb-dec" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-dec-yes" value="Yes" style="edgeStyle=orthogonalEdgeStyle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="task-cb-dec" target="task-cb-invoke" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="860" y="575"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e-dec-no" value="No" style="edgeStyle=orthogonalEdgeStyle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="task-cb-dec" target="task-readd" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e-cb-readd" style="edgeStyle=orthogonalEdgeStyle;" parent="1" source="task-cb-invoke" target="task-readd" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="930" y="575"/>
+                            <mxPoint x="930" y="642"/>
+                            <mxPoint x="882" y="642"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e-loop" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#6c8ebf;strokeWidth=2;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="task-readd" target="task-take" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="610" y="642"/>
+                            <mxPoint x="610" y="304"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="api-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;verticalAlign=top;arcSize=2;" parent="1" vertex="1">
+                    <mxGeometry x="990" y="4" width="290" height="500" as="geometry"/>
+                </mxCell>
+                <mxCell id="api-title" value="Public API" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=13;" parent="1" vertex="1">
+                    <mxGeometry x="980" y="25" width="290" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="api-read" value="ambientLightRead(pLux)&#xa;─────────────────────────&#xa;NULL → ESP_ERR_INVALID_ARG&#xa;i2cRead DATA_LOW+HIGH (2 B)&#xa;*pLux = (HIGH&lt;&lt;8) | LOW" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=8;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="998" y="56" width="254" height="82" as="geometry"/>
+                </mxCell>
+                <mxCell id="api-thresh" value="ambientLightSetThreshold(uwThreshold)&#xa;──────────────────────────────────&#xa;i2cWrite {THRESH_H, low, high}&#xa;[little-endian, 3 bytes]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=8;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="998" y="154" width="254" height="72" as="geometry"/>
+                </mxCell>
+                <mxCell id="api-sleep" value="ambientLightSleep()&#xa;─────────────────────&#xa;i2cWrite CONTROL = 0x00  (standby)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=8;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="998" y="242" width="254" height="58" as="geometry"/>
+                </mxCell>
+                <mxCell id="api-wake" value="ambientLightWake()&#xa;────────────────────&#xa;i2cWrite CONTROL = 0x01  (active)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=8;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="998" y="316" width="254" height="58" as="geometry"/>
+                </mxCell>
+                <mxCell id="api-cb" value="ambientLightRegisterCallback(cbCallback)&#xa;──────────────────────────────────────&#xa;s_cbAmbientLightCallback = cbCallback&#xa;Pass NULL to unregister" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=8;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="998" y="390" width="254" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;fontColor=#000000;darkOpacity=0.05;fillColor=#FFF9B2;strokeColor=none;fillStyle=solid;direction=west;gradientDirection=north;gradientColor=#FFF2A1;shadow=1;size=20;pointerEvents=1;" vertex="1" parent="1">
+                    <mxGeometry x="470" y="830" width="140" height="160" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

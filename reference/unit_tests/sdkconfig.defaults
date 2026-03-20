@@ -1,0 +1,6 @@
+# Disable IDF test runner to avoid dependencies on esp_system, esp_ipc, etc.
+# We use a custom main() directly.
+CONFIG_UNITY_ENABLE_IDF_TEST_RUNNER=n
+
+CONFIG_FREERTOS_MAX_TASK_NAME_LEN=16
+CONFIG_FREERTOS_HZ=100

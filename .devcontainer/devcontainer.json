@@ -1,0 +1,22 @@
+{
+    "name": "ESP-IDF Challenge",
+    "dockerComposeFile": "../docker-compose.yaml",
+    "service": "esp_challenge",
+    "workspaceFolder": "/challenge",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "idf.espIdfPath": "/opt/esp/idf",
+                "idf.toolsPath": "/opt/esp/tools",
+                "idf.pythonBinPath": "/opt/esp/python_env/idf5.5_py3.12_env/bin/python"
+            },
+            "extensions": [
+                "espressif.esp-idf-extension",
+                "ms-vscode.cpptools",
+                "ms-vscode.cmake-tools",
+                "anthropic.claude-code"
+            ]
+        }
+    },
+    "remoteUser": "root"
+}
