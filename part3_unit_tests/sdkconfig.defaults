@@ -1,0 +1,9 @@
+# Required sdkconfig defaults for unit test builds.
+# Copy this file into your unit_tests/ directory as sdkconfig.defaults.
+#
+# Disables IDF test runner to avoid dependencies on esp_system, esp_ipc etc.
+# We use a custom main() with UNITY_BEGIN/UNITY_END directly.
+CONFIG_UNITY_ENABLE_IDF_TEST_RUNNER=n
+
+CONFIG_FREERTOS_MAX_TASK_NAME_LEN=16
+CONFIG_FREERTOS_HZ=100

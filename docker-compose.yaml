@@ -1,0 +1,13 @@
+services:
+  esp_challenge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: esp_challenge:latest
+    container_name: esp_challenge
+    volumes:
+      - .:/challenge
+    working_dir: /challenge
+    # Essential for menuconfig and interactive debugging
+    tty: true
+    stdin_open: true

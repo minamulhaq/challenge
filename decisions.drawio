@@ -1,0 +1,423 @@
+<mxfile host="app.diagrams.net" version="21.0.0">
+
+  <!-- ================================================================== -->
+  <!-- Page 1 — Active Object: Two Queues + Result Matching               -->
+  <!-- ================================================================== -->
+  <diagram name="Active Object — How It Works" id="active-object">
+    <mxGraphModel dx="1300" dy="860" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="860" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ── Top banner ── -->
+        <mxCell id="banner" value="Everything goes through the queues — including alerts. The ISR posts CMD_ALERT to the HIGH queue. The owner task handles it the same way as any other command. One loop, no bypass paths." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=2;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="10" y="10" width="1370" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- ================================================================ -->
+        <!-- COLUMN 1 — Callers (x: 10-270)                                  -->
+        <!-- ================================================================ -->
+
+        <mxCell id="callers-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;arcSize=2;" vertex="1" parent="1">
+          <mxGeometry x="10" y="52" width="260" height="750" as="geometry" />
+        </mxCell>
+        <mxCell id="callers-hdr" value="Callers" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="10" y="56" width="260" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- Task A — HIGH priority -->
+        <mxCell id="task-a-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="22" y="86" width="236" height="148" as="geometry" />
+        </mxCell>
+        <mxCell id="task-a-hdr" value="Task A  —  power management" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="22" y="88" width="236" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="task-a-badge" value="HIGH priority" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d79b00;strokeColor=#d79b00;fontColor=#ffffff;fontStyle=1;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="130" y="106" width="118" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="task-a-cmd" value="cmd.type   = CMD_SLEEP&#xa;cmd.caller = TaskA   ← return address&#xa;cmd.result = none&#xa;cmd.status = statusVar" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;spacingLeft=6;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="28" y="106" width="196" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="task-a-send" value="enqueue(cmd) → HIGH queue" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d79b00;strokeColor=#a07000;fontColor=#ffffff;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="28" y="174" width="230" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="task-a-wait" value="wait for notification → blocks here..." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=9;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="28" y="198" width="230" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- Task B — NORMAL priority -->
+        <mxCell id="task-b-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="22" y="238" width="236" height="148" as="geometry" />
+        </mxCell>
+        <mxCell id="task-b-hdr" value="Task B  —  sensor reader" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="22" y="240" width="236" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="task-b-badge" value="NORMAL priority" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6c8ebf;strokeColor=#6c8ebf;fontColor=#ffffff;fontStyle=1;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="118" y="258" width="130" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="task-b-cmd" value="cmd.type   = CMD_READ&#xa;cmd.caller = TaskB   ← return address&#xa;cmd.result = luxVar  ← result stored here&#xa;cmd.status = statusVar" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=6;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="28" y="258" width="196" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="task-b-send" value="enqueue(cmd) → NORMAL queue" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#6c8ebf;strokeColor=#336699;fontColor=#ffffff;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="28" y="326" width="230" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="task-b-wait" value="wait for notification → blocks here..." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;fontSize=9;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="28" y="350" width="230" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- Task C — NORMAL priority -->
+        <mxCell id="task-c-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="22" y="394" width="236" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="task-c-hdr" value="Task C  —  threshold config" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="22" y="396" width="236" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="task-c-cmd" value="cmd.type   = CMD_SET_THRESH&#xa;cmd.caller = TaskC&#xa;cmd.result = none&#xa;cmd.status = statusVar" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=6;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="28" y="414" width="196" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="task-c-send" value="enqueue(cmd) → NORMAL queue" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#6c8ebf;strokeColor=#336699;fontColor=#ffffff;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="28" y="462" width="230" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- ALERT ISR -->
+        <mxCell id="isr-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;arcSize=5;" vertex="1" parent="1">
+          <mxGeometry x="22" y="510" width="236" height="96" as="geometry" />
+        </mxCell>
+        <mxCell id="isr-hdr" value="ALERT ISR  —  hardware interrupt" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="22" y="512" width="236" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="isr-note" value="cmd.type = CMD_ALERT&#xa;enqueue_from_isr(cmd → HIGH queue)&#xa;&#xa;No caller, no result — this command&#xa;runs the callback, not a caller task." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=6;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="28" y="530" width="224" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ================================================================ -->
+        <!-- COLUMN 2 — Two Queues (x: 290-520)                              -->
+        <!-- ================================================================ -->
+
+        <mxCell id="queues-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;arcSize=2;" vertex="1" parent="1">
+          <mxGeometry x="290" y="52" width="230" height="620" as="geometry" />
+        </mxCell>
+        <mxCell id="queues-hdr" value="Command Queues" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="290" y="56" width="230" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- HIGH queue box -->
+        <mxCell id="high-q-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="300" y="86" width="210" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="high-q-label" value="HIGH QUEUE" style="text;html=1;strokeColor=none;fillColor=#d79b00;align=center;fontStyle=1;fontSize=11;fontColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="308" y="90" width="194" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="high-q-how" value="dequeue(HIGH_QUEUE, no-wait)&#xa;timeout = 0  →  non-blocking&#xa;Owner checks this FIRST every loop." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#d79b00;align=left;spacingLeft=6;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="308" y="120" width="194" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="high-q-item0" value="CMD_ALERT  [from ISR]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="308" y="184" width="194" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="high-q-item1" value="CMD_SLEEP  [Task A]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="308" y="218" width="194" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="high-q-item2" value="CMD_WAKE   [Task A]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="308" y="252" width="194" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="high-q-note" value="Alerts are urgent — they jump ahead of reads." style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=2;fontSize=9;fontColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="300" y="284" width="210" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow between queues -->
+        <mxCell id="q-arrow" value="if HIGH is empty →" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="300" y="342" width="210" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- NORMAL queue box -->
+        <mxCell id="norm-q-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="300" y="368" width="210" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="norm-q-label" value="NORMAL QUEUE" style="text;html=1;strokeColor=none;fillColor=#6c8ebf;align=center;fontStyle=1;fontSize=11;fontColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="308" y="372" width="194" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="norm-q-how" value="dequeue(NORMAL_QUEUE, wait-forever)&#xa;Blocks here when HIGH is empty." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#eaf4ff;strokeColor=#6c8ebf;align=left;spacingLeft=6;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="308" y="402" width="194" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="norm-q-item1" value="CMD_READ  [Task B]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="308" y="466" width="194" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="norm-q-item2" value="CMD_SET_THRESH  [Task C]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="308" y="500" width="194" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="norm-q-dots" value="…" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="308" y="532" width="194" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="norm-q-note" value="Batch reads wait — but never block alerts." style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=2;fontSize=9;fontColor=#336699;" vertex="1" parent="1">
+          <mxGeometry x="300" y="558" width="210" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ================================================================ -->
+        <!-- COLUMN 3 — I2C Owner Task (x: 540-1080)                        -->
+        <!-- ================================================================ -->
+
+        <mxCell id="owner-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fff4;strokeColor=#82b366;arcSize=2;" vertex="1" parent="1">
+          <mxGeometry x="540" y="52" width="840" height="750" as="geometry" />
+        </mxCell>
+        <mxCell id="owner-hdr" value="I2C Owner Task  —  one loop, all command types handled here" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="540" y="56" width="840" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- Step 1 — two-queue polling -->
+        <mxCell id="step1-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="554" y="86" width="812" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="step1-title" value="① Pick next command — HIGH queue first" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="554" y="88" width="812" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="step1-code" value="// Check HIGH queue first (non-blocking)&#xa;cmd = dequeue(HIGH_QUEUE, no-wait)&#xa;if cmd is empty:&#xa;    cmd = dequeue(NORMAL_QUEUE, wait-forever)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=8;fontSize=10;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="562" y="108" width="796" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Step 2 — full switch including CMD_ALERT -->
+        <mxCell id="step2-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="554" y="200" width="812" height="224" as="geometry" />
+        </mxCell>
+        <mxCell id="step2-title" value="② dispatch on command type → execute the right I/O work" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="554" y="202" width="812" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="step2-code" value="CMD_READ        →  read DATA registers          →  combine bytes  →  store result  →  notify caller&#xa;CMD_SET_THRESH  →  write THRESHOLD registers                       →  store result  →  notify caller&#xa;CMD_SLEEP       →  write CONTROL (disable)                         →  store result  →  notify caller&#xa;CMD_WAKE        →  write CONTROL (enable)                          →  store result  →  notify caller" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#82b366;align=left;spacingLeft=8;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="562" y="222" width="796" height="68" as="geometry" />
+        </mxCell>
+
+        <!-- CMD_ALERT row — highlighted differently -->
+        <mxCell id="step2-alert" value="CMD_ALERT  →  wait 30ms (debounce)&#xa;               read INT_STATUS register  (clears the ALERT pin)&#xa;               read DATA registers       (get lux value)&#xa;               invoke alert callback(lux) (notify application)&#xa;               re-arm the interrupt" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=8;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="562" y="296" width="796" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="step2-alert-note" value="No pCaller to notify — the callback IS the result delivery." style="text;html=1;strokeColor=none;fillColor=none;align=right;fontStyle=2;fontSize=9;fontColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="562" y="392" width="796" height="16" as="geometry" />
+        </mxCell>
+
+        <!-- Step 3 — result matching -->
+        <mxCell id="step3-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="554" y="438" width="812" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="step3-title" value="③  Result delivery — cmd carries a reference to the caller's result variable" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="554" y="440" width="812" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="step3-code" value="if cmd.result is set:&#xa;    write lux value → caller's result variable  (e.g. Task B's luxVar)&#xa;write status → caller's status variable&#xa;notify(cmd.caller)  — wake ONLY the task that sent this command" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#d6b656;align=left;spacingLeft=8;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="562" y="460" width="796" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="step3-note" value="No result queue. No broadcast. The command struct was a round-trip ticket — it already had the delivery address baked in." style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=2;fontSize=9;fontColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="554" y="526" width="812" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Step 4 — loop back -->
+        <mxCell id="step4" value="④  Loop back to ①  —  check HIGH queue again before waiting on NORMAL" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="554" y="570" width="812" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- I2C Hardware -->
+        <mxCell id="hw" value="I2C Hardware (ALS3000 sensor)" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="840" y="620" width="280" height="48" as="geometry" />
+        </mxCell>
+
+        <!-- Return notification box -->
+        <mxCell id="notify-box" value="notify(cmd.caller)&#xa;→ wakes Task A or Task B or Task C&#xa;→ only the one that sent this command&#xa;→ all others stay blocked" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=8;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="554" y="620" width="260" height="68" as="geometry" />
+        </mxCell>
+
+        <!-- ================================================================ -->
+        <!-- EDGES                                                            -->
+        <!-- ================================================================ -->
+
+        <!-- Task A → HIGH queue -->
+        <mxCell id="e-a-hq" value="HIGH" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d79b00;strokeWidth=2;fontSize=9;fontStyle=1;" edge="1" source="task-a-send" target="high-q-bg" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ISR → HIGH queue -->
+        <mxCell id="e-isr-hq" value="CMD_ALERT" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#b85450;strokeWidth=2;fontSize=9;fontStyle=1;" edge="1" source="isr-bg" target="high-q-bg" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Task B → NORMAL queue -->
+        <mxCell id="e-b-nq" value="NORMAL" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#6c8ebf;strokeWidth=2;fontSize=9;fontStyle=1;" edge="1" source="task-b-send" target="norm-q-bg" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Task C → NORMAL queue -->
+        <mxCell id="e-c-nq" value="" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#6c8ebf;strokeWidth=2;" edge="1" source="task-c-send" target="norm-q-bg" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- HIGH queue → owner step1 -->
+        <mxCell id="e-hq-owner" value="dequeue" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d79b00;strokeWidth=2;fontSize=9;fontStyle=1;" edge="1" source="high-q-bg" target="step1-bg" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- NORMAL queue → owner step1 -->
+        <mxCell id="e-nq-owner" value="dequeue" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#6c8ebf;strokeWidth=2;fontSize=9;fontStyle=1;" edge="1" source="norm-q-bg" target="step1-bg" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Owner step3 → Hardware -->
+        <mxCell id="e-owner-hw" value="i2cRead / i2cWrite" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#666666;strokeWidth=2;fontSize=10;fontStyle=1;" edge="1" source="step2-bg" target="hw" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- notify-box → Task B -->
+        <mxCell id="e-result-b" value="notify(TaskB)" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;strokeWidth=2;dashed=1;fontSize=9;fontStyle=1;fontColor=#82b366;" edge="1" source="notify-box" target="task-b-wait" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="554" y="654" />
+              <mxPoint x="140" y="654" />
+              <mxPoint x="140" y="361" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- notify-box → Task A -->
+        <mxCell id="e-result-a" value="notify(TaskA)" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d79b00;strokeWidth=2;dashed=1;fontSize=9;fontStyle=1;fontColor=#d79b00;" edge="1" source="notify-box" target="task-a-wait" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="554" y="654" />
+              <mxPoint x="140" y="654" />
+              <mxPoint x="140" y="209" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+  <!-- ================================================================== -->
+  <!-- Page 2 — I/O vs Processing Separation                              -->
+  <!-- ================================================================== -->
+  <diagram name="Testing Without Mocks" id="io-separation">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Banner -->
+        <mxCell id="banner2" value="If a function mixes I/O with logic, you need mocks just to test the logic. Split them and the logic tests itself — no mocking infrastructure needed." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=2;fontSize=11;align=center;" vertex="1" parent="1">
+          <mxGeometry x="10" y="10" width="1070" height="32" as="geometry" />
+        </mxCell>
+
+        <!-- ── LEFT: Current (problem) ── -->
+        <mxCell id="cur-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff0f0;strokeColor=#b85450;arcSize=2;" vertex="1" parent="1">
+          <mxGeometry x="10" y="54" width="320" height="590" as="geometry" />
+        </mxCell>
+        <mxCell id="cur-title" value="Current design  ✗" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=13;fontColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="10" y="58" width="320" height="22" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cur-fn-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="22" y="88" width="296" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="cur-fn-title" value="ambientLightRead(pLux)  —  I/O and logic tangled together" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="22" y="90" width="296" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="cur-fn-code" value="rawBytes = i2c_read(ADDR, DATA_LOW, 2 bytes)  // I/O&#xa;lux = combine(rawBytes[high], rawBytes[low])  // logic" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=8;fontSize=10;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="30" y="110" width="280" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="cur-fn-problem" value="To test the byte-combine logic you must&#xa;first mock the i2c_read call above it." style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=2;fontSize=10;fontColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="22" y="158" width="296" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="cur-fn-arrow" value="↓  so the unit test becomes…" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=2;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="22" y="200" width="296" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cur-test-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="22" y="254" width="296" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="cur-test-title" value="Unit test — all this just to test one line of math" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="22" y="256" width="296" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="cur-test-code" value="stub i2c_read to return [low=0xE8, high=0x03]&#xa;// 0x03E8 = 1000&#xa;&#xa;lux = ambientLightRead()&#xa;assert lux == 1000" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;spacingLeft=8;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="30" y="276" width="280" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="cur-verdict" value="✗  The stub is coupled to the implementation.&#xa;Change the I2C call → test breaks.&#xa;The test knows too much about internals." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=2;fontSize=9;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="22" y="432" width="296" height="54" as="geometry" />
+        </mxCell>
+
+        <!-- ── RIGHT: Proposed ── -->
+        <mxCell id="prop-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0fff4;strokeColor=#82b366;arcSize=2;" vertex="1" parent="1">
+          <mxGeometry x="360" y="54" width="720" height="590" as="geometry" />
+        </mxCell>
+        <mxCell id="prop-title" value="Proposed design  ✓" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=13;fontColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="360" y="58" width="720" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- I/O wrapper -->
+        <mxCell id="io-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="372" y="88" width="340" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="io-title" value="I/O wrapper  —  thin, no logic" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="372" y="90" width="340" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="io-code" value="function readLuxRaw(out lux):&#xa;    rawBytes = i2c_read(ADDR, DATA_LOW, 2 bytes)&#xa;    if error: return error&#xa;    lux = combineLuxBytes(rawBytes)  ← calls pure fn&#xa;    return OK" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff9c4;strokeColor=#d6b656;align=left;spacingLeft=8;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="380" y="110" width="324" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Pure function -->
+        <mxCell id="pure-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="372" y="238" width="340" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="pure-title" value="Pure function  —  no I/O, just math" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="372" y="240" width="340" height="16" as="geometry" />
+        </mxCell>
+        <mxCell id="pure-code" value="function combineLuxBytes(low, high):&#xa;    return (high &lt;&lt; 8) | low" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=8;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="380" y="260" width="324" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Hardware -->
+        <mxCell id="hw2" value="I2C Hardware" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="432" y="522" width="220" height="46" as="geometry" />
+        </mxCell>
+
+        <!-- Unit test box -->
+        <mxCell id="ut-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="742" y="226" width="326" height="224" as="geometry" />
+        </mxCell>
+        <mxCell id="ut-title" value="Unit test  —  zero mocks" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=11;fontColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="742" y="230" width="326" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="ut-code" value="test [combine 1000 lux]:&#xa;    // 0x03E8 = 1000&#xa;    lux = combineLuxBytes(low=0xE8, high=0x03)&#xa;    assert lux == 1000&#xa;&#xa;test [combine zero]:&#xa;    lux = combineLuxBytes(low=0x00, high=0x00)&#xa;    assert lux == 0" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=8;fontSize=9;fontFamily=Courier New;" vertex="1" parent="1">
+          <mxGeometry x="750" y="252" width="310" height="148" as="geometry" />
+        </mxCell>
+        <mxCell id="ut-verdict" value="✓  No CMock. No Stub. No Expect.&#xa;Just call the function with known inputs,&#xa;check the output. Done." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=10;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="742" y="456" width="326" height="54" as="geometry" />
+        </mxCell>
+
+        <!-- Integration test box -->
+        <mxCell id="it-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="742" y="76" width="326" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="it-title" value="Integration test  —  real hardware or HIL" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontStyle=1;fontSize=11;fontColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="742" y="80" width="326" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="it-desc" value="Tests the I/O wrapper against the real bus:&#xa;· correct register address sent&#xa;· correct byte order received&#xa;· error codes propagated properly&#xa;· no mocks — real hardware response" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="750" y="102" width="310" height="96" as="geometry" />
+        </mxCell>
+
+        <!-- ── Edges ── -->
+        <mxCell id="e-io-pure" value="calls" style="edgeStyle=orthogonalEdgeStyle;fontSize=9;" edge="1" source="io-box" target="pure-box" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-io-hw" value="i2cRead / i2cWrite" style="edgeStyle=orthogonalEdgeStyle;strokeWidth=2;fontSize=9;fontStyle=1;" edge="1" source="io-box" target="hw2" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="542" y="500" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-ut-pure" value="calls directly" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;strokeWidth=2;fontSize=9;fontStyle=1;" edge="1" source="ut-box" target="pure-box" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-it-io" value="exercises via real bus" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d79b00;strokeWidth=2;fontSize=9;fontStyle=1;" edge="1" source="it-box" target="io-box" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+
+</mxfile>
