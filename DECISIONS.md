@@ -5,6 +5,8 @@
 ## Part 2 — Why I wrote it this way (Assuming this is pattern being followed in actual code base that I join, Though I have new ideas to improve, the initial thought is to follow current practices without breaking the flow of current code base, If I have enough time, I would then try to think about improvements in current code base but still follow the concept that current project should not break at any stage). The high level diagram is also added [Ambient Light WOrk flow](https://github.com/minamulhaq/ch/blob/master/part2_new_component/ambient_light_flow.drawio)
 
 
+
+
 ### ISR removes itself before giving the semaphore
 
 I copied this pattern from the reference `door_sensor` and kept it deliberately. The idea is simple: if the ISR stays registered while the task is sitting in the 30ms debounce delay, the ALERT pin could bounce and fire a second interrupt before the first one is even processed. By removing the handler as the very first thing in the ISR, that can't happen. The handler only comes back at the very end of the task loop, after `INT_STATUS` is cleared and the callback has finished. It's a one-shot by design.
@@ -21,7 +23,11 @@ There are six I2C operations in init, each of which can fail, and every failure 
 
 `i2cRead` takes the register address as a separate parameter. `i2cWrite` doesn't — it just takes a raw byte buffer. So the register address has to be the first byte in the buffer you pass in, followed by the data. That's standard I2C framing: you write the register address first, then the value. Nothing unusual here, just following the API contract.
 
----
+
+## Part3:
+- Added github actions to run the test on every push/pull request to run the tests. 
+ 
+--
 
 ## Things I'd do differently on a real project 
 
